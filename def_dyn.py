@@ -27,31 +27,7 @@ def dynamics(x, t, p, stim = None):
         sympy Matrix containing dx/dt
     '''
     # Original Code
-    # dxdt = None
-    # return Matrix([dxdt])
-
-    # For 1 Neuron Dynamic
-    # return NaKL(x, t, p, stim)
-    Cm, g_Na, g_K, g_L, E_Na, E_K, E_L, vm, vh, vn, dvm, dvh, dvn, tm0, tm1, th0, th1, tn0, tn1 = p
-
-    V, m, h, n = x
-
-    dvdt = -1/Cm * (g_Na*m**3*h*(V - E_Na) + g_K*n**4*(V - E_K) +
-                    g_L*(V - E_L) - stim)
-
-    xm = 0.5*(1+tanh((V - vm)/dvm))
-    tm = tm0 + tm1*(1 - tanh((V - vm)/dvm)**2)
-    dmdt = (xm - m)/tm
-
-    xh = 0.5*(1+tanh((V - vh)/dvh))
-    th = th0 + th1*(1 - tanh((V - vh)/dvh)**2)
-    dhdt = (xh - h)/th
-
-    xn = 0.5*(1+tanh((V - vn)/dvn))
-    tn = tn0 + tn1*(1 - tanh((V - vn)/dvn)**2)
-    dndt = (xn - n)/tn
-
-    return Matrix([dvdt, dmdt, dhdt, dndt])
+    return CaFluorescence
 
 ##########################################
 
@@ -128,3 +104,16 @@ def NaKL(x, t, p, stim = None):
     dndt = (xn - n)/tn
 
     return Matrix([dvdt, dmdt, dhdt, dndt])
+
+def CaFluorescence(x, t, p, stim = None):
+    Cm, Ca, K_Ca = p
+    I_Na, I_K, I_CaL, I_CaT, I_SK, I_L = None # update by equation
+
+    # voltage
+    V = -1/Cm * (I_Na + I_K + I_CaL + I_CaT + I_SK + I_L - stim)
+
+    # concentration
+    epi = 1
+    dCadt = -epi*(I_CaL + I_CaT) - K_Ca*(Ca - 0.1)
+
+    return Matrix([])
