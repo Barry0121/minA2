@@ -8,7 +8,8 @@ University of California, San Diego
 
 from def_dyn import get_dynamics
 from utils import read_specs, RK4
-from run_da import path_to_specs
+import run_da
+path_to_specs =  run_da.path_to_specs
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,7 +33,7 @@ def get_data(data_folder, name, data_file, twin, pred_len):
     # make images folder if does not exist
     folder_name = data_folder + name + '_images'
     if not os.path.exists(folder_name): os.makedirs(folder_name)
-    
+
     return results, true_data, obs_data[start_data:end_data]
 ##################################################################
 
@@ -110,7 +111,7 @@ if __name__ == '__main__':
                          np.linspace(0, num_pred+1, num_pred+1),
                          stim[end_estimation:end_estimation+num_pred+1])
     else: stim = np.empty(num_pred)
-    
+
     # fig 1 action plot
     image_folder = data_folder + name + '_images'
     min_action = plot_action(action, image_folder)
@@ -144,6 +145,7 @@ if __name__ == '__main__':
     ax_obs[0].set_title(name + ' Observed Vars', fontsize = 22)
     fig_obs.savefig(image_folder +'/' + name + '_obs_vars.pdf', bbox_inches = 'tight')
 
+    print(image_folder +'/' + name + '_obs_vars.pdf')
     # fig 3 estimation and prediction for unobserved variables
     if twin:
         fig_unobs, ax_unobs = plt.subplots(len(unobs_plots), 1)
@@ -159,7 +161,7 @@ if __name__ == '__main__':
         ax_unobs[0].set_title(name + ' Unobserved Vars', fontsize = 22)
         fig_unobs.savefig(image_folder +'/' + name + '_unobs_vars.pdf', bbox_inches = 'tight')
 
-    plt.show()
+    # plt.show()
 
 
 

@@ -12,7 +12,7 @@ import os
 import scipy
 from utils import RK4
 
-try: import ipopt
+try: import cyipopt
 except: print('ipopt not installed')
 
 try: from snopt import snoptb
@@ -25,7 +25,7 @@ class Action:
         '''initialize the action object
 
         Args:
-            params  : parameters including the dynamics and 
+            params  : parameters including the dynamics and
             seed    : np seed sequence
         '''
         self.rng = np.random.default_rng(seed)
@@ -99,7 +99,7 @@ class Action:
         zeroth element of each entry.
         Column/array formats should also be in the form t  s_1  s_2 ...
         """
-        
+
         data = np.load(data_file) if data_file.endswith('npy') else np.loadtxt(data_file)
 
         self.N_data = N if N is not None else data.shape[0]
@@ -130,7 +130,7 @@ class Action:
                 print('Action level: ', self.min_A_arr[i])
                 np.savetxt(file_temp, self.minpaths.reshape(1, -1), fmt = '%1.5e')
                 file_temp.flush()
-        
+
         #remove when run sucessfully
         os.remove(self.data_folder+self.name+'_{:d}.txt'.format(id))
         return self.minpaths[:self.D*self.N_model], self.minpaths[self.D*self.N_model:], self.min_A_arr, self.t_model
@@ -149,7 +149,7 @@ class Action:
                                         params = (P0, stim[i-1]))[self.notLidx]
         X0[::self.model_skip, self.Lidx] = self.Y
         return X0
-    
+
     def _gen_rf(self, Rf0, alpha, beta):
         Rf0 = np.array(Rf0) if isinstance(Rf0, list) else Rf0*np.ones(self.D)
         alpha = np.array(alpha) if isinstance(alpha, list) else alpha*np.ones(self.D)
@@ -193,7 +193,7 @@ class Action:
         dmdx/=(len(self.Lidx)/2 * self.N_data)
 
         diff_f = X[1:] - self.disc_trapezoid(self.f, X, p, self.stim, self.t_model)
-        
+
         dfdx = self._get_dfdx(X, p, self.fjacx, self.N_model, self.D,
                               self.t_model, self.rf, diff_f, self.stim)
 
@@ -203,8 +203,8 @@ class Action:
         return np.concatenate((dmdx+dfdx, dfdp))
 
     def _optimize(self, XP0):
-        if self.optimizer.upper() == 'IPOPT':
-            res = ipopt.minimize_ipopt( self._action,
+        if self.optimizer.upper() == 'CYIPOPT':
+            res = cyipopt.minimize_ipopt( self._action,
                                         XP0,
                                         jac=self._grad_action,
                                         bounds=self.bounds,

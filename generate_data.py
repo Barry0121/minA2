@@ -32,7 +32,7 @@ if __name__ == '__main__':
     # p = (8.17,) # parameters, must be in tuple
     # noise_std = np.sqrt(0.25) # add noise to the data
     ####################################
-    
+
     specs = read_specs(path_to_specs)
     dyn, _, _ = get_dynamics(specs)
     if not os.path.exists(specs['data_folder']): os.makedirs(specs['data_folder'])
@@ -48,16 +48,17 @@ if __name__ == '__main__':
     sol[0] = x0
     for i, t in enumerate(time_arr[1:], 1):
         sol[i] = RK4(f, sol[i-1], t, dt, params = (p, stim[i-1]))
+        print("generated data at time=", t)
 
     plt.plot(time_arr, sol[:, 0])
-    plt.show()
+    # plt.show()
 
     obs_dim = specs['obs_dim'] if specs['obs_dim'] != -1 else np.arange(specs['num_dims'])
     np.save(specs['data_folder']+specs['data_file'],
                np.vstack((time_arr, sol.T[obs_dim]+np.random.normal(0, noise_std, (sol.T[obs_dim].shape)))).T)
     np.save(specs['data_folder']+'all_'+specs['data_file'], np.vstack((time_arr, sol.T)).T)
-    
-    
+
+
 
 
 

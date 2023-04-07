@@ -7,7 +7,7 @@
 - [cyipopt](https://github.com/mechmotum/cyipopt)
 - [seaborn](https://seaborn.pydata.org/installing.html) for some plotting purposes
 
-The simplest way to install these packages is to use anaconda using the following commands: 
+The simplest way to install these packages is to use anaconda using the following commands:
 1. conda install numba
 2. conda install -c conda-forge cyipopt
 3. conda install seaborn
@@ -75,7 +75,7 @@ data_file        : name (not path) of data file in data folder, generate data cr
 
 stim_file        : name (not path) of stim file in data folder, if none comment out (str ending in npy or txt)
 
-optimizer        : 'SNOPT' or 'IPOPT'
+optimizer        : 'SNOPT' or 'CYIPOPT'
 
 Note: scientific notation must have decimal point and sign, ex: 1.e-3, 1.2e+4
 

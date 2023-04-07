@@ -15,3 +15,5 @@ max_beta         : 30              # RF : RF0 * alpha**beta
 data_folder      : 'Runs/NaKL/data/'         # path to data folder
 data_file        : 'NaKL.npy'       # name of data file in data folder (generate data creates file with this name)
 stim_file        : 'stim.npy'  # name of stim file in data folder, if none comment out
+generate_twin    : False       # generate twin experienment data
+optimizer        : 'CYIPOPT'    # specify the optimizer to use

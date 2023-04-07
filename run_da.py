@@ -43,12 +43,11 @@ from def_dyn import get_dynamics
 from model import Action
 from utils import read_specs, read_bounds
 
-
 ######## Modify Here ##############
 path_to_folder = 'Runs/NaKL/'
 path_to_specs = path_to_folder+'specs.yaml'
 path_to_params = path_to_folder+'params.txt'
-max_iter_per_step = 50000
+max_iter_per_step = 300
 tol_per_step = 1e-6
 num_init_cond = 1
 ###################################
@@ -59,20 +58,20 @@ def min_action(random_seed, params):
     pid = random_seed.spawn_key[0]
     action = Action(params, random_seed)
     return action.min_A(pid)
-    
+
 
 def run(Args):
     specs = read_specs(path_to_specs)
     f, fjacx, fjacp = get_dynamics(specs)
 
     if specs.get('generate_twin', False) is True:
-        generate_twin(specs, f)
+        generate_data(specs, f)
 
-    optimizer = specs.get('optimizer','IPOPT')
+    optimizer = specs.get('optimizer','CYIPOPT')
     print_level = 0 if charm else 5
 
-    if optimizer == 'IPOPT':
-        opt_options = { 
+    if optimizer == 'CYIPOPT':
+        opt_options = {
                         'print_level' : print_level,
                         'max_iter' : max_iter_per_step, # Set the max number of iterations
                         # 'derivative_test' : 'first-order', # set derivative test
@@ -120,6 +119,7 @@ def run(Args):
     ss = rng.bit_generator._seed_seq
     init_seeds = ss.spawn(num_init_cond)
     if charm:
+        print("Save Results...")
         sol = np.array(charm.pool.map(partial(min_action, params = params), init_seeds), dtype=object)
         np.savez(specs['data_folder']+specs['name']+'_results.npz',
                 path = np.array(sol[:, 0]),
@@ -129,6 +129,7 @@ def run(Args):
                 **specs
                 )
     else:
+        print("Save Results...")
         sol = min_action(init_seeds[0], params)
         np.savez(specs['data_folder']+specs['name']+'_results.npz',
                 path = sol[0],
@@ -147,4 +148,4 @@ if __name__ == '__main__':
     else:
         run(None)
 
-    
+
