@@ -7,11 +7,11 @@
 
 # param bounds (in order)
 0.5, 1.5 # 100pF Cm
-200 600 # 450nS g_Na
+0 2500 # 450nS g_Na
 0 100 # 50nS g_K
-5 40 # 19nS g_CaL
+0 20 # 19nS g_CaL
 0 10 # 2.7nS g_CaT
-0 15 # 6nS g_SK
+0 10 # 6nS g_SK
 0 10 # 2nS g_L
 0 80 # 50mV E_Na
 -120 0 # -90mV E_K
