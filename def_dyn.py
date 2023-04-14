@@ -105,15 +105,54 @@ def NaKL(x, t, p, stim = None):
 
     return Matrix([dvdt, dmdt, dhdt, dndt])
 
+def sigmoid(x, y, z):
+    return 0.5 * (1 + tanh((y - x) / 2*z))
+
 def CaFluorescence(x, t, p, stim = None):
-    Cm, Ca, K_Ca = p
+    # unpack (1st line: currents & voltage; 2nd line: gating variables h,n)
+    Cm, g_Na, g_K, g_CaL, g_CaT, g_SK, g_L, E_Na, E_K, E_L, \
+        theta_aT, sigma_aT, theta_bT, sigma_bT, theta_rT, sigma_rT, theta_m, sigma_m, theta_s, sigma_s, theta_n, sigma_n, tau_r0, tau_r1, k_Ca, ks, f, th, tn = p
+
+    V, h, n, Ca, r_T = x
+
+    Ca_ext = 2.5 # mM
+    m_inf = 1.0 / (1.0 + exp((V - theta_m) / sigma_m))
+    s_inf = 1.0 / (1.0 + exp((V - theta_s) / sigma_s))
+    h_inf = (0.128 * exp((V + 15) / -18)) / (0.128 * exp((V + 15) / -18) + (4 / (1 + exp((V + 27) /  -5))))
+    n_inf = 1.0 / (1.0 + exp((V - theta_n) / sigma_n))
+
+    # currents
+    E_CaL = 0 # TODO: Ask Jason for feedback, and change accordingly
+    E_CaT = 0
     I_Na, I_K, I_CaL, I_CaT, I_SK, I_L = None # update by equation
+    I_Na = g_Na * m_inf**3 * h * (V - E_Na)
+    I_K = g_K * n**4 * (V - E_K)
+    I_CaL = g_CaL * s_inf**2 * (V - E_CaL)
+    I_CaT = g_CaT * sigmoid(V, theta_aT, sigma_aT)**3 * (sigmoid(r_T, theta_bT, sigma_bT) - sigmoid(0, theta_bT, sigma_bT))**3 * (V - E_CaT)
+    I_SK  = g_SK * (Ca**4 / (Ca**4 + ks**4)) * (V - E_K)
+    I_L = g_L * (V - E_L)
 
     # voltage
-    V = -1/Cm * (I_Na + I_K + I_CaL + I_CaT + I_SK + I_L - stim)
+    dvdt = -1/Cm * (I_Na + I_K + I_CaL + I_CaT + I_SK + I_L - stim)
+
+    # gating variables
+    dhdt = (h_inf - h) / th
+    dndt = (n_inf - n) / tn
+
+    # xh = 0.5*(1+tanh((V - vh)/dvh))
+    # th = th0 + th1*(1 - tanh((V - vh)/dvh)**2)
+    # dhdt = (xh - h)/th
+
+    # xn = 0.5*(1+tanh((V - vn)/dvn))
+    # tn = tn0 + tn1*(1 - tanh((V - vn)/dvn)**2)
+    # dndt = (xn - n)/tn
 
     # concentration
-    epi = 1
-    dCadt = -epi*(I_CaL + I_CaT) - K_Ca*(Ca - 0.1)
+    dCadt = -f*(I_CaL + I_CaT) - k_Ca*(Ca - 0.1)
 
-    return Matrix([])
+    # rT
+    r_Tinf = 1/(1 + exp((V - theta_rT) / sigma_rT))
+    tau_rT = tau_r0 + tau_r1 / (1 + exp((V - theta_rT) / sigma_rT))
+    drTdt = (r_Tinf - r_T) / tau_rT
+
+    return Matrix([dvdt, dhdt, dndt, dCadt, drTdt])

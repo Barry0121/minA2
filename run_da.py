@@ -44,7 +44,7 @@ from model import Action
 from utils import read_specs, read_bounds
 
 ######## Modify Here ##############
-path_to_folder = 'Runs/NaKL/'
+path_to_folder = 'Runs/CaFluorescence/'
 path_to_specs = path_to_folder+'specs.yaml'
 path_to_params = path_to_folder+'params.txt'
 max_iter_per_step = 300

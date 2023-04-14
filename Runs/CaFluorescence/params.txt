@@ -1,0 +1,37 @@
+# state var bounds
+-60, 70 # V
+0, 1 # h
+0, 1 # n
+0 2.5 # Ca mM (milimolar)
+0, 1 # rT
+
+# param bounds (in order)
+0.5, 1.5 # 100pF Cm
+200 600 # 450nS g_Na
+0 100 # 50nS g_K
+5 40 # 19nS g_CaL
+0 10 # 2.7nS g_CaT
+0 15 # 6nS g_SK
+0 10 # 2nS g_L
+0 80 # 50mV E_Na
+-120 0 # -90mV E_K
+-100 0 # -70mV E_L
+-80 -10 # -65mV theta_aT
+-15 -2 # -7.8mV sigma_aT
+0 1 # 0.4mV theta_bT Note: theta_b in arij's paper
+-1 -0.01 # -0.1mV sigma_bT
+-90 -40 # -67mV theta_rT
+1 5 # 2mV sigma_rT
+-50 -10 # -35mV theta_m
+-10 -1# -5mV sigma_m
+-40 0 # -20mV theta_s
+-1 -0.01 # -0.05mV sigma_s
+-50 -10 # -30mV theta_n
+-10 -1 # -5mV sigma_n
+100 300 # 200ms tau_r0
+0 150 # 87.5ms tau_r1
+0.1 0.5 # 0.3ms^-1 k_Ca
+0.1 1 # 0.5μM ks
+0 1 # 0.1 f Note: the farction of free to total intracelullar concentration of Ca, bounded between 0 and 1
+0 10 # 1ms th
+0 20 # 10ms tn
