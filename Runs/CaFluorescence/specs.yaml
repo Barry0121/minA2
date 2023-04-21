@@ -5,8 +5,8 @@ name             : 'CaFluorescence'      # name for saving files
 num_data         : 2400             # number of data steps (int)
 start_data       : 7600             # start index for data (int)
 time_step        : 1               # time steps of model per time step of data (int >= 1)
-num_dims         : 4               # number of state variables in model (int)
-num_par          : 19              # number of parameters in the model to estimate (int)
+num_dims         : 5               # number of state variables in model (int)
+num_par          : 29              # number of parameters in the model to estimate (int)
 obs_dim          : [0]             # observed dimensions ex: [0], [0, 3, 5] or -1 means all observed
 RM               : 1               # measurement error value (inverse of variance of measurement noise)
 RF0              : [1.e-3, 50, 500, 500] # model error init cond

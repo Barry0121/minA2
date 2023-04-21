@@ -26,7 +26,6 @@ def dynamics(x, t, p, stim = None):
     Returns:
         sympy Matrix containing dx/dt
     '''
-    # Original Code
     return CaFluorescence
 
 ##########################################
@@ -43,7 +42,7 @@ def get_dynamics(specs):
         fjacx   : df/dx
         fjacp   : df/dp
     '''
-    func = dynamics # can change to point to different functions
+    func = CaFluorescence # can change to point to different functions
 
     num_vars = specs['num_dims']
     num_pars = specs['num_par']
@@ -110,8 +109,7 @@ def sigmoid(x, y, z):
 
 def CaFluorescence(x, t, p, stim = None):
     # unpack (1st line: currents & voltage; 2nd line: gating variables h,n)
-    Cm, g_Na, g_K, g_CaL, g_CaT, g_SK, g_L, E_Na, E_K, E_L, \
-        theta_aT, sigma_aT, theta_bT, sigma_bT, theta_rT, sigma_rT, theta_m, sigma_m, theta_s, sigma_s, theta_n, sigma_n, tau_r0, tau_r1, k_Ca, ks, f, th, tn = p
+    Cm, g_Na, g_K, g_CaL, g_CaT, g_SK, g_L, E_Na, E_K, E_L, theta_aT, sigma_aT, theta_bT, sigma_bT, theta_rT, sigma_rT, theta_m, sigma_m, theta_s, sigma_s, theta_n, sigma_n, tau_r0, tau_r1, k_Ca, ks, f, th, tn = p
 
     V, h, n, Ca, r_T = x
 
@@ -123,8 +121,8 @@ def CaFluorescence(x, t, p, stim = None):
 
     # currents
     E_CaL = 0 # TODO: Ask Jason for feedback, and change accordingly
-    E_CaT = 0
-    I_Na, I_K, I_CaL, I_CaT, I_SK, I_L = None # update by equation
+    E_CaT = 0 # TODO: Use E_ext formulas for E_CaL and E_CaT
+    # I_Na, I_K, I_CaL, I_CaT, I_SK, I_L = None # update by equation
     I_Na = g_Na * m_inf**3 * h * (V - E_Na)
     I_K = g_K * n**4 * (V - E_K)
     I_CaL = g_CaL * s_inf**2 * (V - E_CaL)
@@ -138,14 +136,6 @@ def CaFluorescence(x, t, p, stim = None):
     # gating variables
     dhdt = (h_inf - h) / th
     dndt = (n_inf - n) / tn
-
-    # xh = 0.5*(1+tanh((V - vh)/dvh))
-    # th = th0 + th1*(1 - tanh((V - vh)/dvh)**2)
-    # dhdt = (xh - h)/th
-
-    # xn = 0.5*(1+tanh((V - vn)/dvn))
-    # tn = tn0 + tn1*(1 - tanh((V - vn)/dvn)**2)
-    # dndt = (xn - n)/tn
 
     # concentration
     dCadt = -f*(I_CaL + I_CaT) - k_Ca*(Ca - 0.1)
