@@ -6,13 +6,14 @@ num_data         : 2400             # number of data steps (int)
 start_data       : 7600             # start index for data (int)
 time_step        : 1               # time steps of model per time step of data (int >= 1)
 num_dims         : 5               # number of state variables in model (int)
-num_par          : 29              # number of parameters in the model to estimate (int)
+num_par          : 30              # number of parameters in the model to estimate (int)
 obs_dim          : [0]             # observed dimensions ex: [0], [0, 3, 5] or -1 means all observed
 RM               : 1               # measurement error value (inverse of variance of measurement noise)
-RF0              : [1.e-3, 50, 500, 500] # model error init cond
+RF0              : [1.e-3, 50, 500, 500, 500] # model error init cond
 alpha            : 1.5               # RF : RF0 * alpha**beta
 max_beta         : 30              # RF : RF0 * alpha**beta
 data_folder      : 'Runs/CaFluorescence/data/'         # path to data folder
 data_file        : 'CaFluorescence.npy'       # name of data file in data folder (generate data creates file with this name)
-stim_file        : 'stim.npy'  # name of stim file in data folder, if none comment out
+# stim_file        : 'stim.npy'  # name of stim file in data folder, if none comment out
+# generate_twin    : True
 optimizer        : 'CYIPOPT'    # specify the optimizer to use

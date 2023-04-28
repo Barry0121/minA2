@@ -43,11 +43,13 @@ from def_dyn import get_dynamics
 from model import Action
 from utils import read_specs, read_bounds
 
+
 ######## Modify Here ##############
-path_to_folder = 'Runs/CaFluorescence/'
+path_to_folder = 'Runs/Jason_CaFluorescence/'
+# path_to_folder = 'Runs/NaKL/'
 path_to_specs = path_to_folder+'specs.yaml'
 path_to_params = path_to_folder+'params.txt'
-max_iter_per_step = 300
+max_iter_per_step = 100
 tol_per_step = 1e-6
 num_init_cond = 1
 ###################################
@@ -64,8 +66,8 @@ def run(Args):
     specs = read_specs(path_to_specs)
     f, fjacx, fjacp = get_dynamics(specs)
 
-    if specs.get('generate_twin', False) is True:
-        generate_data(specs, f)
+    # if specs.get('generate_twin', False) is True:
+    #     generate_data(specs, f)
 
     optimizer = specs.get('optimizer','CYIPOPT')
     print_level = 0 if charm else 5

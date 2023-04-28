@@ -16,6 +16,7 @@
 1, 100 # 50mV E_Na
 -140, -10 # -90mV E_K
 -100, 0 # -70mV E_L
+0, 90 # 85mV E_Ca
 -80, -10 # -65mV theta_aT
 -15, -2 # -7.8mV sigma_aT
 0, 1 # 0.4mV theta_bT Note: theta_b in arij's paper
