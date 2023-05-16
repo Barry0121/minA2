@@ -1,3 +1,24 @@
+# Instruction for Running CaFluorescence Dynamic
+1. Make sure to have all dependency installed, and the test run with NaKL is successful (See instructions below for more info).
+2. Create a target folder for your CaFluorescence experiment.
+    * The folder has to be under `Runs` directory. See `Runs/Jason_CaFluorescence` for an example.
+    * Make sure to have the following sections:
+        - `specs.yaml` : this file contains parameters on how you want to run your experiments.
+        - `params.txt` : contains all the lower/upper bound for your dynamics's parameters.
+        - `data` : directory where the stimulus current and generated data files are stored.
+    * In `specs.yaml`, make sure your <b>name</b>, <b>data_folder</b>, and <b>data_file</b> arguments are set correctly and pointing to the correct file location.
+3. Download stimuli data, which should be in `.npy` form (ex: `stim.npy`).
+    * Put the target stimulus file under the `data` directory.
+4. Now, go to `def_dyn.py` and change/create your dynamics.
+    * To change previous CaFluorescence dynamics, you can just modify the existing CaFlorescence function (ex: `Jason_CaFluorescence()`).
+    * To create a new dynamics, write a new function that takes `x, t, p, I_stim` as arguments.
+    * In both cases, make sure the `func` variable in the `get_dynamics()` function is set to your target dynamics function.
+5. Generate the data by running `python generate_data.py` (or `python3 generate_data.py`). You should see new data file appear under the same `data` directory you put you stimulus file. 
+6. To run the experiment, go to `run_da.py`, change the string variable `path_to_folder` to the new folder you just created for your experiment, and call `python run_da.py` (or `python3 run_da.py`, depending on your python version).
+
+
+---
+
 # Installation Instructions
 
 ### Python Dependencies
